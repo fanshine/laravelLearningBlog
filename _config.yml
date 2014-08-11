@@ -3,13 +3,13 @@ auto:        true
 server:      false
 server_port: 4000
 baseurl:     /
-url:         http://zhanglubing.github.com
+url:         http://fanshine.github.io/laravelLearningBlog/
 
 author:
-  name:      zhanglubing
-  blog:      少有人走的路
-  email1:    zhanglubing927@gmail.com
-  email2:    zhanglubing927[at]gmail.com
+  name:      fanshine
+  blog:      Laravel 知识整理
+  email1:    fanshine124@gmail.com
+  email2:    fanshine124[at]gmail.com
 
 feed:        /atom.xml
 

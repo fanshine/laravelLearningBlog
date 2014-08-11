@@ -3,7 +3,7 @@
 	<head>
 	    <meta charset="utf-8">
 	    <title>
-	    	{% if page.title %} {{ page.title }} - {% endif %} {{site.author.blog}}
+	    	 Hello World -  Laravel 知识整理
 	    </title>
 	    <meta name="description" content=" (Fanshine)">
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
@@ -30,11 +30,62 @@
 					<li><a href="/about.html">关于</a></li>
 					<li><a href="/atom.xml" target="_blank" rel="nofollow">RSS</a></li>
 				</ul>
-				<h1><a id="title" href="/">{{site.author.blog}}</a></h1>
+				<h1><a id="title" href="/">Laravel 知识整理</a></h1>
 			</div>
 
 
-			{{content}}
+			<script type="text/javascript">
+	$(document).ready(function(){
+		$("#comments_trigger").toggle(
+			function(){
+				$("#comments_list").show();
+				$("#comments_trigger").html("<b>隐藏评论</b>");
+			},
+			function(){
+				$("#comments_list").hide();
+				$("#comments_trigger").html("<b>显示评论</b>");
+			}
+		);
+	});
+</script>
+
+<div id="content">
+	<div class="text-post posts">
+
+		<h2>Hello World</h2>
+
+		<div class="caption rich-content">
+
+			<p>Hello World。</p>
+
+
+		</div>
+
+		<div class="meta">
+			<p> ∞ 发布日期：2012-03-14 </p>
+			<p> ∞ 发布目录：hello </p>
+			<p> ∞ 发布标签：Hello, World</p>
+			<p> ∞ 永久连接：http://fanshine.github.io/laravelLearningBlog//2012-03-14/hello-world.html </p>
+		</div>
+
+		<div class="comments">
+			<a id="comments_trigger" href="#comments" onclick="show_comments()"><b>显示评论</b></a>
+			<div id="comments_list" style="display: none;">
+				<hr/>
+				<div id="bm_comments"></div>
+				<script type="text/javascript">
+					(function(){
+					var script = document.createElement('script'); script.type = "text/javascript";
+						script.src = "http://baye.me/script?key=f5ef00e2aa7c11e1b86412314303b429";
+						(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+					})();
+				</script>
+			</div>
+		</div>
+
+	</div>
+</div>
+
 
 
 			<div id="footer">
@@ -50,7 +101,7 @@
 					</form>
 				</div>
 
-				<p>© 2012 {{site.author.blog}}</p>
+				<p>© 2012 Laravel 知识整理</p>
 				<p>Powered by <a href="http://www.github.com" target="_blank">Github</a> and <a href="https://github.com/mojombo/jekyll" target="_blank">Jekyll</a> .</p>
 
 			</div>

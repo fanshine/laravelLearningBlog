@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+    <title></title>
+    <link href="http://fanshine.github.io/laravelLearningBlog//atom.xml" rel="self" type="application/atom+xml"/>
+    <link href="http://fanshine.github.io/laravelLearningBlog/" rel="alternate" type="text/html" />
+    <updated>2014-08-11T19:16:29+08:00</updated>
+    <id>http://fanshine.github.io/laravelLearningBlog/</id>
+
+    <author>
+        <name>Laravel 知识整理</name>
+        <email>fanshine124@gmail.com</email>
+    </author>
+
+    
+    <entry>
+        <title>no branches ready for upload</title>
+        <link href="http://fanshine.github.io/laravelLearningBlog//2013-04-15/no-branches-ready-for-upload.html"/>
+        <updated>2013-04-15T00:00:00+08:00</updated>
+        <id>http://fanshine.github.io/laravelLearningBlog//2013-04-15/no-branches-ready-for-upload.html</id>
+        <content type="html">&lt;p&gt;You must do the following steps:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;repo abandon &amp;lt;branch&amp;gt; &amp;lt;project&amp;gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;repo start &amp;lt;branch&amp;gt; &amp;lt;project&amp;gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git reset --hard &amp;lt;latest-github-commit-id&amp;gt;
+  &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;git add/commit&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;repo upload &amp;lt;project&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+</content>
+    </entry>
+    
+    <entry>
+        <title>使用Maven定制MANIFEST.MF文件</title>
+        <link href="http://fanshine.github.io/laravelLearningBlog//2012-12-10/custom-manifest-with-maven.html"/>
+        <updated>2012-12-10T00:00:00+08:00</updated>
+        <id>http://fanshine.github.io/laravelLearningBlog//2012-12-10/custom-manifest-with-maven.html</id>
+        <content type="html">&lt;p&gt;对于Java开发者来说，对MANIFEST.MF文件应该不陌生，至少有所耳闻。我们打开任何一个jar包，都会看到一个METE-INF目录，该目录下必然有一个MANIFEST.MF文件，这个文件是用来描述当前jar文件的信息。&lt;/p&gt;
+
+&lt;p&gt;举个例子，下面是我们常使用的c3p0-0.9.1.2.jar文件里的MANIFEST.MF内容：&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Manifest-Version: 1.0&lt;br/&gt;
+  Ant-Version: Apache Ant 1.7.0&lt;br/&gt;
+  Created-By: 1.5.0_07-87 (&quot;Apple Computer, Inc.&quot;)&lt;br/&gt;
+  Extension-Name: com.mchange.v2.c3p0&lt;br/&gt;
+  Specification-Vendor: Machinery For Change, Inc.&lt;br/&gt;
+  Specification-Version: 1.0&lt;br/&gt;
+  Implementation-Vendor-Id: com.mchange&lt;br/&gt;
+  Implementation-Vendor: Machinery For Change, Inc.&lt;br/&gt;
+  Implementation-Version: 0.9.1.2&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;它看起来简单明了，我就不多解释了。当然，不同的jar包里的内容可能完全不同，比如说Springframwork的那些jar文件，内容不但多了许多，而且名称也都变得不同。&lt;/p&gt;
+
+&lt;p&gt;我曾经参与的一个Web项目中，有一个需求是在页面某个位置显示代码构建的时间，看起来差不多是这样的：&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Build At: 2012-12-10 23:54:22&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;（当时的情况还要求显示代码的版本号，具体做法本文先略过。）&lt;/p&gt;
+
+&lt;p&gt;当时就是采用定制MANIFEST.MF（加入构建时间戳），并用程序读取该时间戳实现的！
+接下来就结合该需求说说在使用Maven构建的项目中，如何为MANIFEST.MF增加自定义内容，并完成该功能。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;首先，在pom.xml文件中增加属性：&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;&amp;lt;properties&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;maven.build.timestamp.format&gt;yyyy-MM-dd HH:mm:ss&amp;lt;/maven.build.timestamp.format&amp;gt;&lt;br/&gt;
+&amp;lt;/properties&amp;gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;接下来配置maven-war-plugin插件，在configuration里增加archive节点，配置如下：&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;&amp;lt;plugin&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;groupId&amp;gt;org.apache.maven.plugins&amp;lt;/groupId&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;artifactId&amp;gt;maven-war-plugin&amp;lt;/artifactId&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;version&amp;gt;2.1.1&amp;lt;/version&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;configuration&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;archive&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;manifest&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;addDefaultImplementationEntries&amp;gt;true&amp;lt;/addDefaultImplementationEntries&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;addDefaultSpecificationEntries&amp;gt;true&amp;lt;/addDefaultSpecificationEntries&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/manifest&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;manifestEntries&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;Built-At&amp;gt;${maven.build.timestamp}&amp;lt;/Built-At&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/manifestEntries&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/archive&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/configuration&amp;gt;&lt;br/&gt;
+&amp;lt;/plugin&amp;gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;这样，当你再次打包工程时，新打包的文件里的MANIFEST.MF就会包含构建时间，如图：&lt;br/&gt;
+&lt;img src=&quot;../uploads/2012-12-10/manifest.mf.png&quot; alt=&quot;MANIFEST.MF&quot; /&gt;&lt;br/&gt;
+PS：你还可以增加更多内容，只需要在manifestEntries节点中增加key-value值就OK啦。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;最后一步：你需要写一小段代码来获取该构件时间，把它显示在你的页面上。&lt;br/&gt;
+或许你已经知道大名鼎鼎的框架Springframework获取版本号的代码是这样的(详见&lt;a href=&quot;https://github.com/SpringSource/spring-framework/blob/3.1.x/org.springframework.core/src/main/java/org/springframework/core/SpringVersion.java&quot;&gt;SpringVersion.java&lt;/a&gt;)：&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getVersion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pkg&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SpringVersion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPackage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pkg&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pkg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getImplementationVersion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;但很遗憾这种方式在Web项目中不起作用。因为为Web应用编写的Java代码，会编译为class文件并放在$WEBROOT/WEB-INF/classes目录下，而war包的MANIFEST.MF文件位于$WEBROOT/META-INF目录下，它们不在同一个“包”下。事实上，Package类根本没有提供任何获取自定义值的方法（哈哈哈），详见&lt;a href=&quot;http://www.oschina.net/uploads/doc/javase-6-doc-api-zh_CN/java/lang/Package.html&quot;&gt;Package.html&lt;/a&gt;。&lt;br/&gt;
+所以 --- 是时候自己动手了。&lt;/p&gt;
+</content>
+    </entry>
+    
+    <entry>
+        <title>使用Idea社区版开发Web项目</title>
+        <link href="http://fanshine.github.io/laravelLearningBlog//2012-12-06/development-webapp-in-idea.html"/>
+        <updated>2012-12-06T00:00:00+08:00</updated>
+        <id>http://fanshine.github.io/laravelLearningBlog//2012-12-06/development-webapp-in-idea.html</id>
+        <content type="html">&lt;p&gt;在很久很久以前，就听说&lt;a href=&quot;http://www.jetbrains.com/idea/&quot;&gt;IDEA&lt;/a&gt;是个绝佳的Java开发工具，奈何囊中羞涩，个人对付费软件只能望而却步；一直善良老实的我，也不好意思去CRACK。所以一直都是使用开源免费的&lt;a href=&quot;http://www.eclipse.org/&quot;&gt;Eclipse&lt;/a&gt;作为工作和学习的IDE。
+其实以前也尝试使用过社区版，心里总觉得嘛，功能不全，试试而已，然后就搁下了，所以它一直只是我桌面上的一个的图标而已。。。&lt;/p&gt;
+
+&lt;p&gt;但是&lt;a href=&quot;http://www.jetbrains.com/idea/&quot;&gt;IDEA&lt;/a&gt;绝不是鸡肋！它已经有很多优秀的功能（只会用小部分功能，待挖掘。。。目前感觉很快，够敏捷，:-)），完全值得我们去尝试，相信很多&lt;a href=&quot;http://www.eclipse.org/&quot;&gt;Eclipse&lt;/a&gt;使用者，特别是Eclipse EE版的使用者，可能会嫌弃它没有Web开发功能，但事实上我们也可以用它来开发Web项目的。&lt;/p&gt;
+
+&lt;p&gt;下面会来证明这一点，我会用&lt;a href=&quot;http://www.jetbrains.com/idea/&quot;&gt;IDEA&lt;/a&gt; + &lt;a href=&quot;http://maven.apache.org/&quot;&gt;Maven&lt;/a&gt; + &lt;a href=&quot;http://jetty.codehaus.org/jetty/&quot;&gt;Jetty&lt;/a&gt;来开发Web项目，主要演示下如何调试代码。&lt;br/&gt;
+（真希望你对&lt;a href=&quot;http://maven.apache.org/&quot;&gt;Maven&lt;/a&gt;不陌生，否则花一点时间去学习一下吧，你会喜欢它的。）&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;首先我们来创建一个&lt;a href=&quot;http://maven.apache.org/&quot;&gt;Maven&lt;/a&gt;项目，项目类型选择“Maven Module”，输入项目名称“demo”。&lt;br/&gt;
+&lt;img src=&quot;http://fanshine.github.io/laravelLearningBlog//uploads/2012-12-06/222828_JrZA_80532.png&quot; alt=&quot;创建项目-项目类型&quot; /&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;选择项目使用的Archetype为“maven-archetype-webapp”，这里也可以随便修改下GroupId等信息。&lt;br/&gt;
+&lt;img src=&quot;http://fanshine.github.io/laravelLearningBlog//uploads/2012-12-06/222904_DxyX_80532.png&quot; alt=&quot;创建项目-Archetype&quot; /&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;这一步直接点击“Finish”。&lt;br/&gt;
+&lt;img src=&quot;http://fanshine.github.io/laravelLearningBlog//uploads/2012-12-06/223024_yV3j_80532.png&quot; alt=&quot;创建项目-属性&quot; /&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;打开&lt;a href=&quot;http://maven.apache.org/&quot;&gt;Maven&lt;/a&gt;的配置文件pom.xml，在build节点中添加如下代码，即增加Maven的&lt;a href=&quot;http://docs.codehaus.org/display/JETTY/Maven+Jetty+Plugin&quot;&gt;Jetty插件&lt;/a&gt;。&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;&amp;lt;plugins&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;lt;plugin&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;groupId&amp;gt;org.mortbay.jetty&amp;lt;/groupId&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;artifactId&amp;gt;maven-jetty-plugin&amp;lt;/artifactId&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;version&amp;gt;6.1.26&amp;lt;/version&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;configuration&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;connectors&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;connector implementation=&quot;org.mortbay.jetty.nio.SelectChannelConnector&quot;&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;port&amp;gt;8080&amp;lt;/port&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/connector&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/connectors&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;scanIntervalSeconds&amp;gt;10&amp;lt;/scanIntervalSeconds&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;lt;/configuration&amp;gt;&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;lt;/plugin&amp;gt;&lt;br/&gt;
+&amp;lt;/plugins&amp;gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;选择工具栏的&quot;Run&quot;--&gt;&quot;Edit Configurations...&quot;，打开“Run/Debug Configurations”窗口，点击绿色的“+”号按钮，在弹出的下拉列表里选择“Maven”。
+&lt;img src=&quot;http://fanshine.github.io/laravelLearningBlog//uploads/2012-12-06/223812_yM8Q_80532.png&quot; alt=&quot;配置运行/调试-增加&quot; /&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;取一个名称，比如“demo-jetty”；在&quot;Working directory&quot;一栏选择你的工作目录，并在&quot;Command Line&quot;里输入“jetty:run”。然后点击“OK”。&lt;br/&gt;
+&lt;img src=&quot;http://fanshine.github.io/laravelLearningBlog//uploads/2012-12-06/223909_KTqX_80532.png&quot; alt=&quot;配置运行/调试-Maven&quot; /&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;到此，配置已经OK了，在工具栏上出现了一个名为“demo-jetty”的运行项，点击后面的调试按钮就可以进行调试了。&lt;br/&gt;
+&lt;img src=&quot;http://fanshine.github.io/laravelLearningBlog//uploads/2012-12-06/223947_wYLs_80532.png&quot; alt=&quot;配置运行/调试-Maven&quot; /&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;当然，Web开发还有很多方面啦，这篇仅仅是演示了如何使用&lt;a href=&quot;http://www.jetbrains.com/idea/&quot;&gt;IDEA&lt;/a&gt;结合&lt;a href=&quot;http://maven.apache.org/&quot;&gt;Maven&lt;/a&gt;来开发（着重调试）Web项目。路漫漫其修远兮，吾将上下而求索，我也是初步来尝试&lt;a href=&quot;http://www.jetbrains.com/idea/&quot;&gt;IDEA&lt;/a&gt;，希望以后可以把它用好！！&lt;/p&gt;
+</content>
+    </entry>
+    
+    <entry>
+        <title>Lucene简介和入门</title>
+        <link href="http://fanshine.github.io/laravelLearningBlog//2012-10-19/hello-lucene.html"/>
+        <updated>2012-10-19T00:00:00+08:00</updated>
+        <id>http://fanshine.github.io/laravelLearningBlog//2012-10-19/hello-lucene.html</id>
+        <content type="html">&lt;p&gt;这几天我花了些时间去研究了下Lucene，读了很多博客和文章，也写了些示例代码，对全文检索以及使用到的技术都有了认识，感觉非常好。&lt;br/&gt;
+Lucene是当今非常流行的全文检索工具，对于我们开发者来说，给应用添加一个搜索功能确实容易很多了，希望在接下来的项目里可以一施拳脚。&lt;br/&gt;
+接下来对Lucene进行一个初步的介绍，并附带一个简单的示例程序。&lt;/p&gt;
+
+&lt;h3&gt;Lucene 简介&lt;/h3&gt;
+
+&lt;p&gt;Lucene是一个基于Java的高性能、可伸缩的全文信息检索库，它提供了简单而强大的API，让你很容易为文档创建索引，并基于创建的索引进行搜索。&lt;br/&gt;
+Lucene是由资深全文索引/检索专家Doug Cutting创建的，开始是给自己的博客程序使用，后来开源出来，如今它已成为Apache软件基金会的顶级项目，也成为最受欢迎的Java全文信息检索工具。&lt;/p&gt;
+
+&lt;h3&gt;Lucene 原理&lt;/h3&gt;
+
+&lt;p&gt;Lucene主要完成两件事：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;创建索引&lt;/li&gt;
+&lt;li&gt;基于索引搜索。&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;创建搜索是一件非常关键的一步，Lucene 采用的是一种称为反向索引（inverted index）的机制。
+先说下什么是正向索引（若是有这个概念的话），给你一些文档，让你找到里面的词/短语，类似小学课堂上，老说问：“同学们，有谁来总结下这篇文章讲了什么？”，这是一个从文档到词/短语的过程。&lt;br/&gt;
+而反向索引刚好相反，它是指从词/短语到文档的过程，举一个例子：给出“Java”这个关键字，找到所有Java相关的文档。&lt;/p&gt;
+
+&lt;p&gt;当索引创建已经创建好之后，搜索文档就是先到索引库里去找索引，然后根据找到的索引找到文档。整个过程可以用下图表示：
+&lt;img src=&quot;http://fanshine.github.io/laravelLearningBlog//uploads/2012-10-19/lucene.png&quot; alt=&quot;Lucene典型应用结构图&quot; /&gt;&lt;/p&gt;
+
+&lt;h3&gt;入门示例&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;创建索引&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;docsDir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;src&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;indexDir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;target/index&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Directory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;directory&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FSDirectory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;indexDir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Analyzer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;analyzer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;StandardAnalyzer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Version&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;LUCENE_40&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;IndexWriterConfig&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;IndexWriterConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Version&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;LUCENE_40&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;analyzer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;IndexWriter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;IndexWriter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;directory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;indexDocs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;docsDir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;indexDocs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IndexWriter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;File&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isDirectory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;files&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;listFiles&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;files&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;indexDocs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Document&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Document&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;StringField&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Field&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Store&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;YES&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;StringField&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;path&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Field&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Store&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;YES&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TextField&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;contents&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;FileReader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)));&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;adding &amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addDocument&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;基于索引搜索&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;target/index&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searchField&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;contents&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keyWorld&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;String&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;IndexReader&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reader&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DirectoryReader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FSDirectory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)));&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;IndexSearcher&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searcher&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;IndexSearcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Analyzer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;analyzer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;StandardAnalyzer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Version&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;LUCENE_40&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;QueryParser&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;QueryParser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Version&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;LUCENE_40&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searchField&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;analyzer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Query&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keyWorld&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Search [&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keyWorld&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;]:&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;TopDocs&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;results&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;ScoreDoc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hits&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;scoreDocs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;Document&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;searcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hits&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;reader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;项目基于Maven，完整源码请点击下载：&lt;a href=&quot;http://fanshine.github.io/laravelLearningBlog//uploads/2012-10-19/lucene.zip&quot; title=&quot;lucene.zip&quot;&gt;lucene.zip&lt;/a&gt;&lt;/p&gt;
+</content>
+    </entry>
+    
+    <entry>
+        <title>【转】如何有效编写软件的75条建议</title>
+        <link href="http://fanshine.github.io/laravelLearningBlog//2012-10-07/75-suggestions-how-to-effectively-write-software.html"/>
+        <updated>2012-10-07T00:00:00+08:00</updated>
+        <id>http://fanshine.github.io/laravelLearningBlog//2012-10-07/75-suggestions-how-to-effectively-write-software.html</id>
+        <content type="html">&lt;p&gt;原文连接：&lt;a href=&quot;http://blog.csdn.net/kevin_long/article/details/2007131&quot; title=&quot;如何有效编写软件的75条建议&quot;&gt;如何有效编写软件的75条建议&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;看了这篇文章的发布日期，发现这是一篇2007年末写的总结性文章，虽然部分经验显得稍微过时了，但根据我的经历印证，它们依然是非常好的建议，相信至今有很多开发人员、开发主管还没有意识到这些建议的重要性，或者说他们还没有在实践中做到。&lt;/p&gt;
+
+&lt;p&gt;在上一家公司里，我们的开发小组按照类似的建议做了些改进，确实有不少成效，摸索出了不少有用的方法，现在回想起来，仍然有些细节没有做好，部分原因是被其他因素限制了，比如公司政策或者项目合同等，我想更多的原因是没有一个在：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;需求管理&lt;/li&gt;
+&lt;li&gt;项目风险&lt;/li&gt;
+&lt;li&gt;项目计划/任务估算/人员分配&lt;/li&gt;
+&lt;li&gt;软件质量&lt;/li&gt;
+&lt;li&gt;环境/工具支持&lt;/li&gt;
+&lt;li&gt;团队沟通&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;等方面的建设性或者正确的做法，刚好这些建议给我很多新的想法，75条涵盖了方方面面，非常赞，希望下次我可以做得更好！！&lt;/p&gt;
+
+&lt;p&gt;好了，&lt;a href=&quot;http://blog.csdn.net/kevin_long/article/details/2007131&quot; title=&quot;如何有效编写软件的75条建议&quot;&gt;原文&lt;/a&gt;内容如下：&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;你们的项目组使用源代码管理工具了么？&lt;br/&gt;
+应该用。VSS、CVS、PVCS、ClearCase、CCC/Harvest、FireFly都可以。我的选择是VSS。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的项目组使用缺陷管理系统了么？&lt;br/&gt;
+应该用。ClearQuest太复杂，我的推荐是BugZilla。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的测试组还在用Word写测试用例么？&lt;br/&gt;
+不要用Word写测试用例（Test Case）。应该用一个专门的系统，可以是Test Manager，也可以是自己开发一个ASP.NET的小网站。主要目的是Track和Browse。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的项目组有没有建立一个门户网站？&lt;br/&gt;
+要有一个门户网站，用来放Contact Info、Baselined Schedule、News等等。推荐Sharepoint Portal Server 2003来实现，15分钟就搞定。买不起SPS 2003可以用WSS (Windows Sharepoint Service)。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的项目组用了你能买到最好的工具么？&lt;br/&gt;
+应该用尽量好的工具来工作。比如，应该用VS.NET而不是Notepad来写C#。用Notepad写程序多半只是一种炫耀。但也要考虑到经费，所以说是“你能买到最好的”。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的程序员工作在安静的环境里么？&lt;br/&gt;
+需要安静环境。这点极端重要，而且要保证每个人的空间大于一定面积。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的员工每个人都有一部电话么？&lt;br/&gt;
+需要每人一部电话。而且电话最好是带留言功能的。当然，上这么一套带留言电话系统开销不小。不过至少每人一部电话要有，千万别搞得经常有人站起来喊：“某某某电话”。《人件》里面就强烈谴责这种做法。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们每个人都知道出了问题应该找谁么？&lt;br/&gt;
+应该知道。任何一个Feature至少都应该有一个Owner，当然，Owner可以继续Dispatch给其他人。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你遇到过有人说“我以为…”么？&lt;br/&gt;
+要消灭“我以为”。Never assume anything。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的项目组中所有的人都坐在一起么？&lt;br/&gt;
+需要。我反对Virtual Team，也反对Dev在美国、Test在中国这种开发方式。能坐在一起就最好坐在一起，好处多得不得了。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的进度表是否反映最新开发进展情况？&lt;br/&gt;
+应该反映。但是，应该用Baseline的方法来管理进度表：维护一份稳定的Schedule，再维护一份最新更改。Baseline的方法也应该用于其它的Spec。Baseline是变更管理里面的一个重要手段。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的工作量是先由每个人自己估算的么？&lt;br/&gt;
+应该让每个人自己估算。要从下而上估算工作量，而不是从上往下分派。除非有其他原因，比如政治任务工期固定等。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的开发人员从项目一开始就加班么？&lt;br/&gt;
+不要这样。不要一开始就搞疲劳战。从项目一开始就加班，只能说明项目进度不合理。当然，一些对日软件外包必须天天加班，那属于剥削的范畴。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的项目计划中Buffer Time是加在每个小任务后面的么？&lt;br/&gt;
+不要。Buffer Time加在每个小任务后面，很容易轻易的就被消耗掉。Buffer Time要整段的加在一个Milestone或者checkpoint前面。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;值得再多花一些时间，从95%做到100%好值得，非常值得。&lt;br/&gt;
+尤其当项目后期人困马乏的时候，要坚持。这会给产品带来质的区别。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;登记新缺陷时，是否写清了重现步骤？&lt;br/&gt;
+要。这属于Dev和Test之间的沟通手段。面对面沟通需要，详细填写Repro Steps也需要。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;写新代码前会把已知缺陷解决么？&lt;br/&gt;
+要。每个人的缺陷不能超过10个或15个，否则必须先解决老的bug才能继续写新代码。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们对缺陷的轻重缓急有事先的约定么？&lt;br/&gt;
+必须有定义。Severity要分1、2、3，约定好：蓝屏和Data Lost算Sev 1，Function Error算Sev 2，界面上的算Sev 3。但这种约定可以根据产品质量现状适当进行调整。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们对意见不一的缺陷有三国会议么？&lt;br/&gt;
+必须要有。要有一个明确的决策过程。这类似于CCB (Change Control Board)的概念。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;所有的缺陷都是由登记的人最后关闭的么？&lt;br/&gt;
+Bug应该由Opener关闭。Dev不能私自关闭Bug。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的程序员厌恶修改老的代码么？&lt;br/&gt;
+厌恶是正常的。解决方法是组织Code Review，单独留出时间来。XP也是一个方法。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们项目组有Team Morale Activity么？&lt;br/&gt;
+每个月都要搞一次，吃饭、唱歌、Outing、打球、开卡丁车等等，一定要有。不要剩这些钱。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们项目组有自己的Logo么？&lt;br/&gt;
+要有自己的Logo。至少应该有自己的Codename。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的员工有印有公司Logo的T-Shirt么？&lt;br/&gt;
+要有。能增强归属感。当然，T-Shirt要做的好看一些，最好用80支的棉来做。别没穿几次就破破烂烂的。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;总经理至少每月参加次项目组会议要的。&lt;br/&gt;
+要让team member觉得高层关注这个项目。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们是给每个Dev开一个分支么？&lt;br/&gt;
+反对。Branch的管理以及Merge的工作量太大，而且容易出错。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;有人长期不Check-In代码么？&lt;br/&gt;
+不可以。对大部分项目来说，最多两三天就应该Check-In。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在Check-In代码时都填写注释了么？&lt;br/&gt;
+要写的，至少一两句话，比如“解决了Bug No.225”。如果往高处拔，这也算做“配置审计”的一部分。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;有没有设定每天Check-In的最后期限？&lt;br/&gt;
+要的，要明确Check-In Deadline。否则会Build Break。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们能把所有源码一下子编译成安装文件吗？&lt;br/&gt;
+要的。这是每日编译（Daily Build）的基础。而且必须要能够做成自动的。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的项目组做每日编译么？&lt;br/&gt;
+当然要做。有三样东西是软件项目/产品开发必备的：1. bug management; 2. source control; 3. daily build。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们公司有没有积累一个项目风险列表？&lt;br/&gt;
+要。Risk Inventory。否则，下个项目开始的时候，又只能拍脑袋分析Risk了。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;设计越简单越好越简单越好。&lt;br/&gt;
+设计时候多一句话，将来可能就带来无穷无尽的烦恼。应该从一开始就勇敢的砍。这叫scope management。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;尽量利用现有的产品、技术、代码千万别什么东西都自己Coding。BizTalk和Sharepoint就是最好的例子，有这两个作为基础，可以把起点 提高很多。或者可以尽量多用现成的Control之类的。或者尽量用XML，而不是自己去Parse一个文本文件；尽量用RegExp，而不是自己从头操 作字符串，等等等等。这就是“软件复用”的体现。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们会隔一段时间就停下来夯实代码么？&lt;br/&gt;
+要。最好一个月左右一次。传言去年年初Windows组在Stevb的命令下停过一个月增强安全。Btw，“夯”这个字念“hang”，第一声。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的项目组每个人都写Daily Report么？&lt;br/&gt;
+要写。五分钟就够了，写10句话左右，告诉自己小组的人今天我干了什么。一则为了沟通，二则鞭策自己（要是游手好闲一天，自己都会不好意思写的）。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的项目经理会发出Weekly Report么？&lt;br/&gt;
+要。也是为了沟通。内容包括目前进度，可能的风险，质量状况，各种工作的进展等。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们项目组是否至少每周全体开会一次？&lt;br/&gt;
+要。一定要开会。程序员讨厌开会，但每个礼拜开会时间加起来至少应该有4小时。包括team meeting, spec review meeting, bug triage meeting。千万别大家闷头写code。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们项目组的会议、讨论都有记录么？&lt;br/&gt;
+会前发meeting request和agenda，会中有人负责主持和记录，会后有人负责发meeting minutes，这都是effective meeting的要点。而且，每个会议都要形成agreements和action items。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;其他部门知道你们项目组在干什么么？&lt;br/&gt;
+要发一些Newsflash给整个大组织。Show your team’s value。否则，当你坐在电梯里面，其他部门的人问：“你们在干嘛”，你回答“ABC项目”的时候，别人全然不知，那种感觉不太好。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;通过Email进行所有正式沟通&lt;br/&gt;
+Email的好处是免得抵赖。但也要避免矫枉过正，最好的方法是先用电话和当面说，然后Email来确认。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;为项目组建立多个Mailing Group&lt;br/&gt;
+如果在AD+Exchange里面，就建Distribution List。比如，我会建ABC Project Core Team，ABC Project Dev Team，ABC Project All Testers，ABC Project Extended Team等等。这样发起Email来方便，而且能让该收到email的人都收到、不该收到不被骚扰。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;每个人都知道哪里可以找到全部的文档么？&lt;br/&gt;
+应该每个人都知道。这叫做知识管理（Knowledge Management）。最方便的就是把文档放在一个集中的File Share，更好的方法是用Sharepoint。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你做决定、做变化时，告诉大家原因了么？&lt;br/&gt;
+要告诉大家原因。Empower team member的手段之一是提供足够的information，这是MSF一开篇的几个原则之一。的确如此，tell me why是人之常情，tell me why了才能有understanding。中国人做事喜欢搞限制，限制信息，似乎能够看到某一份文件的人就是有身份的人。大错特错。权威、权力，不在于 是不是能access information/data，而在于是不是掌握资源。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Stay agile and expect change 要这样。&lt;br/&gt;
+需求一定会变的，已经写好的代码一定会被要求修改的。做好心理准备，对change不要抗拒，而是expect change。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们有没有专职的软件测试人员？&lt;br/&gt;
+要有专职测试。如果人手不够，可以peer test，交换了测试。千万别自己测试自己的。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的测试有一份总的计划来规定做什么和怎么做么？&lt;br/&gt;
+这就是Test Plan。要不要做性能测试？要不要做Usability测试？什么时候开始测试性能？测试通过的标准是什么？用什么手段，自动的还是手动的？这些问题需要用Test Plan来回答。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你是先写Test Case然后再测试的么？&lt;br/&gt;
+应该如此。应该先设计再编程、先test case再测试。当然，事情是灵活的。我有时候在做第一遍测试的同时补上test case。至于先test case再开发，我不喜欢，因为不习惯，太麻烦，至于别人推荐，那试试看也无妨。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你是否会为各种输入组合创建测试用例？&lt;br/&gt;
+不要，不要搞边界条件组合。当心组合爆炸。有很多test case工具能够自动生成各种边界条件的组合??但要想清楚，你是否有时间去运行那么多test case。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的程序员能看到测试用例么？&lt;br/&gt;
+要。让Dev看到Test Case吧。我们都是为了同一个目的走到一起来的：提高质量。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们是否随便抓一些人来做易用性测试？&lt;br/&gt;
+要这么做。自己看自己写的程序界面，怎么看都是顺眼的。这叫做审美疲劳??臭的看久了也就不臭了，不方便的永久了也就习惯了。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你对自动测试的期望正确么？&lt;br/&gt;
+别期望太高。依我看，除了性能测试以外，还是暂时先忘掉“自动测试”吧，忘掉WinRunner和LoadRunner吧。对于国内的软件测试的现状来说，只能“矫枉必须过正”了。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的性能测试是等所有功能都开发完才做的么？&lt;br/&gt;
+不能这样。性能测试不能被归到所谓的“系统测试”阶段。早测早改正，早死早升天。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你注意到测试中的杀虫剂效应了么？&lt;br/&gt;
+虫子有抗药性，Bug也有。发现的新Bug越来越少是正常的。这时候，最好大家交换一下测试的area，或者用用看其他工具和手法，就又会发现一些新bug了。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们项目组中有人能说出产品的当前整体质量情况么？&lt;br/&gt;
+要有。当老板问起这个产品目前质量如何，Test Lead/Manager应该负责回答。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们有单元测试么？&lt;br/&gt;
+单元测试要有的。不过没有单元测试也不是不可以，我做过没有单元测试的项目，也做成功了??可能是侥幸，可能是大家都是熟手的关系。还是那句话，软件工程是非常实践、非常工程、非常灵活的一套方法，某些方法在某些情况下会比另一些方法好，反之亦然。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的程序员是写完代码就扔过墙的么？&lt;br/&gt;
+大忌。写好一块程序以后，即便不做单元测试，也应该自己先跑一跑。虽然有了专门的测试人员，做开发的人也不可以一点测试都不做。微软还有Test Release Document的说法，程序太烂的话，测试有权踢回去。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的程序中所有的函数都有输入检查么？&lt;br/&gt;
+不要。虽然说做输入检查是write secure code的要点，但不要做太多的输入检查，有些内部函数之间的参数传递就不必检查输入了，省点功夫。同样的道理，未必要给所有的函数都写注释。写一部分主要的就够了。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;产品有统一的错误处理机制和报错界面么？&lt;br/&gt;
+要有。最好能有统一的error message，然后每个error message都带一个error number。这样，用户可以自己根据error number到user manual里面去看看错误的具体描述和可能原因，就像SQL Server的错误那样。同样，ASP.NET也要有统一的Exception处理。可以参考有关的Application Block。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们有统一的代码书写规范么？&lt;br/&gt;
+要有。Code Convention很多，搞一份来发给大家就可以了。当然，要是有FxCop这种工具来检查代码就更好了。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的每个人都了解项目的商业意义么？&lt;br/&gt;
+要。这是Vision的意思。别把项目只当成工作。有时候要想着自己是在为中国某某行业的信息化作先驱者，或者时不时的告诉team member，这个项目能够为某某某国家部门每年节省多少多少百万的纳税人的钱，这样就有动力了。平凡的事情也是可以有个崇高的目标的。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;产品各部分的界面和操作习惯一致么？&lt;br/&gt;
+要这样。要让用户觉得整个程序好像是一个人写出来的那样。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;有可以作为宣传亮点的Cool Feature么？&lt;br/&gt;
+要。这是增强团队凝聚力、信心的。而且，“一俊遮百丑”，有亮点就可以掩盖一些问题。这样，对于客户来说，会感觉产品从质量角度来说还是acceptable的。或者说，cool feature或者说亮点可以作为质量问题的一个事后弥补措施。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;尽可能缩短产品的启动时间要这样。&lt;br/&gt;
+软件启动时间（Start-Up time）是客户对性能好坏的第一印象。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;不要过于注重内在品质而忽视了第一眼的外在印象程序员容易犯这个错误：太看重性能、稳定性、存储效率，但忽视了外在感受。而高层经理、客户正相反。这两方面要兼顾，协调这些是PM的工作。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们根据详细产品功能说明书做开发么？&lt;br/&gt;
+要这样。要有设计才能开发，这是必须的。设计文档，应该说清楚这个产品会怎么运行，应该采取一些讲故事的方法。设计的时候千万别钻细节，别钻到数据库、代码等具体实现里面去，那些是后面的事情，一步步来不能着急。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;开始开发和测试之前每个人都仔细审阅功能设计么？&lt;br/&gt;
+要做。Function Spec review是用来统一思想的。而且，review过以后形成了一致意见，将来再也没有人可以说“你看，当初我就是反对这么设计的，现在吃苦头了吧。”&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;所有人都始终想着The Whole Image么？&lt;br/&gt;
+要这样。项目里面每个人虽然都只是在制造一片叶子，但每个人都应该知道自己在制造的那片叶子所在的树是怎么样子的。我反对软件蓝领，反对过分的把软件制造看成流水线、车间。参见第61条。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Dev工作的划分是单纯纵向或横向的么？&lt;br/&gt;
+不能单纯的根据功能模块分，或者单纯根据表现层、中间层、数据库层分。我推荐这么做：首先根据功能模块分，然后每个“层”都有一个Owner来Review所有人的设计和代码，保证consistency。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的程序员写程序设计说明文档么？&lt;br/&gt;
+要。不过我听说微软的程序员1999年以前也不写。所以说，写不写也不是绝对的，偷懒有时候也是可以的。参见第56条。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你在招人面试时让他写一段程序么？&lt;br/&gt;
+要的。我最喜欢让人做字符串和链表一类的题目。这种题目有很多循环、判断、指针、递归等，既不偏向过于考算法，也不偏向过于考特定的API。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们有没有技术交流讲座？&lt;br/&gt;
+要的。每一两个礼拜搞一次内部的Tech Talk或者Chalk Talk吧。让组员之间分享技术心得，这笔花钱送到外面去培训划算。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的程序员都能专注于一件事情么？&lt;br/&gt;
+要让程序员专注一件事。例如说，一个部门有两个项目和10个人，一种方法是让10个人同时参加两个项目，每个项目上每个人都花50%时间；另一种方法是5个人去项目A，5个人去项目B，每个人都100%在某一个项目上。我一定选后面一种。这个道理很多人都懂，但很多领导实践起来就把属下当成可以任意拆分的资源了。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;你们的程序员会夸大完成某项工作所需要的时间么？&lt;br/&gt;
+会的，这是常见的，尤其会在项目后期夸大做某个change所需要的时间，以次来抵制change。解决的方法是坐下来慢慢磨，磨掉程序员的逆反心理，一起分析，并把估算时间的颗粒度变小。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;尽量不要用Virtual Heads 最好不要用Virtual Heads。&lt;br/&gt;
+Virtual heads意味着resource is not secure，shared resource会降低resource的工作效率，容易增加出错的机会，会让一心二用的人没有太多时间去review spec、review design。一个dedicated的人，要强过两个只能投入50%时间和精力的人。我是吃过亏的：7个part time的tester，发现的Bug和干的活，加起来还不如两个full-time的。参见第73条。73条是针对程序员的，75条是针对 Resource Manager的。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;hr /&gt;
+</content>
+    </entry>
+    
+    <entry>
+        <title>Jekyll代码高亮</title>
+        <link href="http://fanshine.github.io/laravelLearningBlog//2012-09-21/jekyll-code-highlight.html"/>
+        <updated>2012-09-21T00:00:00+08:00</updated>
+        <id>http://fanshine.github.io/laravelLearningBlog//2012-09-21/jekyll-code-highlight.html</id>
+        <content type="html">&lt;p&gt;作为一个技术类博客，在博客里粘贴代码是必不可少的事情，代码若没有高亮，可读性真没法说，所以我们需要给自己的博客增加代码高亮的功能。幸运的是，Jekyll提供里代码高亮的功能，我们只需要完成一小部分工作即可。&lt;/p&gt;
+
+&lt;h3&gt;搭建环境&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Python&lt;/li&gt;
+&lt;li&gt;easy_install&lt;/li&gt;
+&lt;li&gt;Pygments&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;Jekyll的代码高亮是使用&lt;a href=&quot;http://pygments.org/&quot; title=&quot;Pygments&quot;&gt;Pygments&lt;/a&gt;来完成的，它是一款语法高亮的&lt;a href=&quot;http://www.python.org/&quot; title=&quot;Python&quot;&gt;Python&lt;/a&gt;包，所以我们首先需要下载并安装&lt;a href=&quot;http://www.python.org/&quot; title=&quot;Python&quot;&gt;Python&lt;/a&gt;。
+在MacOS上，完成这件事变得非常简单，因为&lt;a href=&quot;http://www.python.org/&quot; title=&quot;Python&quot;&gt;Python&lt;/a&gt;是MacOS默认安装的:)，可用如下命令检测是否有Python环境：&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;python --version&lt;br/&gt;
+# Python 2.7.3&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;安装&lt;a href=&quot;http://pygments.org/&quot; title=&quot;Pygments&quot;&gt;Pygments&lt;/a&gt;时需要借助&lt;a href=&quot;http://peak.telecommunity.com/DevCenter/EasyInstall&quot; title=&quot;EasyInstall&quot;&gt;EasyInstall&lt;/a&gt;这个工具，这个工具和&lt;a href=&quot;http://www.python.org/&quot; title=&quot;Python&quot;&gt;Pthon&lt;/a&gt;的关系，就像gems和ruby，或者apt-get和ubuntu的关系一样，它可以让你很方便的自动下载、编译、安装和管理&lt;a href=&quot;http://www.python.org/&quot; title=&quot;Python&quot;&gt;Python&lt;/a&gt;包。在&lt;a href=&quot;http://www.python.org/&quot; title=&quot;Python&quot;&gt;Python&lt;/a&gt;的较高版本中，该工具已经自动附带，比如我的版本是2.7.3，easy_install命令已经可以直接使用了，不同平台和环境，可能有所差异(比如Ubuntu上，需要先安装python-setuptools)。若你发现不能使用easy_install命令，记得先安装它。安装好&lt;a href=&quot;http://peak.telecommunity.com/DevCenter/EasyInstall&quot; title=&quot;EasyInstall&quot;&gt;EasyInstall&lt;/a&gt;之后，执行如下命令安装&lt;a href=&quot;http://pygments.org/&quot; title=&quot;Pygments&quot;&gt;Pygments&lt;/a&gt;：&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;easy_install Pygments&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;到此，需要的环境已经没有问题了，接下来如何在博客中使用代码高亮？&lt;/p&gt;
+
+&lt;h3&gt;代码高亮&lt;/h3&gt;
+
+&lt;p&gt;首先，我们需要生成一个高亮代码的CSS文件，并引入到我们的博客中，生成方式如下：&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;pygmentize -S fruity -f html &gt; syntax.css&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;然后，在博客中使用代码高亮，高亮代码的模板是这样的：&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;{&lt;em&gt;%&lt;/em&gt; highlight &lt;em&gt;词法分析器&lt;/em&gt; %}&lt;br/&gt;
+需要高亮的代码&lt;br/&gt;
+{&lt;em&gt;%&lt;/em&gt; endhighlight %}&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;词法分析器是指你需要高亮的代码是何种语言，比如说&lt;strong&gt;Shell脚本&lt;/strong&gt;的词法分析器是&lt;strong&gt;sh&lt;/strong&gt;，&lt;strong&gt;Java&lt;/strong&gt;的词法分析器是&lt;strong&gt;java&lt;/strong&gt;。支持的词法分析器可以在官方文档&lt;a href=&quot;http://pygments.org/docs/lexers/&quot; title=&quot;Available lexers&quot;&gt;Available lexers&lt;/a&gt;找到。&lt;/p&gt;
+
+&lt;p&gt;例如你要高亮Java版的HelloWorld，只需要把如下代码粘贴到你的博客中：&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;{&lt;em&gt;%&lt;/em&gt; highlight java %}&lt;br/&gt;
+public class Hello {&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;public static void main(String[] args) {&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;System.out.println(&quot;Hello World!&quot;);&lt;br/&gt;
+&amp;nbsp;&amp;nbsp;}&lt;br/&gt;
+}&lt;br/&gt;
+{&lt;em&gt;%&lt;/em&gt; endhighlight %}&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;在我的博客中，显示效果如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Hello&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Hello World!&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;它看起来还不错，代码的可读性大大提高了。&lt;/p&gt;
+
+&lt;h3&gt;Github Pages&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://pages.github.com/&quot; title=&quot;GitHub Pages&quot;&gt;GitHub Pages&lt;/a&gt;也是支持&lt;strong&gt;{&lt;em&gt;%&lt;/em&gt; highlight %}&lt;/strong&gt;标记的，提交上去的博客，生成的代码html代码和你本地生成的相同，另外又使用里相同的样式，所以不会有任何问题。&lt;/p&gt;
+</content>
+    </entry>
+    
+    <entry>
+        <title>设计模式之装饰器模式</title>
+        <link href="http://fanshine.github.io/laravelLearningBlog//2012-09-16/decorator.html"/>
+        <updated>2012-09-16T00:00:00+08:00</updated>
+        <id>http://fanshine.github.io/laravelLearningBlog//2012-09-16/decorator.html</id>
+        <content type="html">&lt;p&gt;装饰模式属于结构性模式，它的意图是在一个对象的外围创建一个称为装饰器的封装，动态地给这个对象添加一些额外的功能。
+装饰模式常用来替代继承，我们知道，继承可以解决很多实际的问题，但是继承缺少灵活性，在多重继承之后，你就知道维护你的代码有多麻烦；继承也容易引起类膨胀，需求变动或者扩展是常有的事情。而装饰模式可以用一种灵活的方式给类增加新的特性，它的重用性和扩展性也很不错。&lt;/p&gt;
+
+&lt;p&gt;先来看看通用代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Component&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;behavior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ConcreteComponent&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Component&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;behavior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Component.&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Decorator&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Component&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Component&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Decorator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Component&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;component&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;behavior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;behavior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ConcreteDecorator&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Decorator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConcreteDecorator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Component&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;behavior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;behavior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addedBehavior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addedBehavior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ConcreteDecorator: Added Behavior.&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;客户端使用的时候，创建需要装饰的组件（Component），然后把该组件交给具体的装饰器（ConcreteDecorator）进行装饰一番，装饰之后的组件就用了新的特性。若是实现了多个装饰器，还可以进行多次装饰，每次都是把组件交给装饰器进行装饰，这样就能得到具有复杂功能的组件。具体代码如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Component&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;component&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConcreteComponent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;component&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConcreteDecorator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;behavior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;接下来对涉及到的四种角色做一个说明：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Component：组件类接口，我们需要去装饰一个组件，这个即是我们需要去装饰的组件的接口。&lt;/li&gt;
+&lt;li&gt;ConcreteComponent：实现Component接口的具体组件类，它完成了基本的功能，但还需要继续扩展，扩展就由装饰器来做咯。&lt;/li&gt;
+&lt;li&gt;Decorator：抽象类装饰器，它一般不会完成任何功能，即用它装饰之后的组件没有有任何变化。&lt;/li&gt;
+&lt;li&gt;ConcreteDecorator：继承Decorator，实现具体的功能，如为需要装饰的组件增加特性，增加属性等。&lt;/li&gt;
+&lt;/ol&gt;
+
+</content>
+    </entry>
+    
+    <entry>
+        <title>如何提高工作效率</title>
+        <link href="http://fanshine.github.io/laravelLearningBlog//2012-09-14/how-to-improve-work-efficiency.html"/>
+        <updated>2012-09-14T00:00:00+08:00</updated>
+        <id>http://fanshine.github.io/laravelLearningBlog//2012-09-14/how-to-improve-work-efficiency.html</id>
+        <content type="html">&lt;p&gt;我已经从事J2EE开发三年时间了。这三年里，我经历了两家公司，第一家制度流程规范，而另外一家工作环境宽松，自由度高，当然了，这个各有各的优势；工作中我参与过20多人合作的大型项目开发，也参与过3人的小项目开发，团队的组成以及规模，也会形成不同到工作方式。&lt;/p&gt;
+
+&lt;p&gt;在不同的公司环境中，以及不同到团队中，有一点我认为是不会变的，那就是你的&lt;strong&gt;工作效率&lt;/strong&gt;。
+你的工作习惯，对待工作的态度，和你的工作效率息息相关，花时间来培养良好的工作习惯和正确的工作态度，可以提高效率。
+这也是我总结出来想要和你们分享的：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;待完成列表&lt;/strong&gt;&lt;br/&gt;
+每天开始工作之前，列出所有今天需要完成到事情，并估算好时间。也有文章推荐在前一天做好计划，见&lt;a href=&quot;http://www.cnblogs.com/Capricornus/archive/2010/10/26/1862014.html&quot;&gt;《合格程序员每天每周每月每年应该做的事》&lt;/a&gt;，这个就根据个人习惯吧。每天下班时检查进度，总结完成情况。渐渐地，你会对任务估算和自己的效率有更多认识。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;先思考再行动&lt;/strong&gt;&lt;br/&gt;
+这非常重要！很多时候，你会发现浪费的时间都是当初考虑不当造成的。比如你在实现一个小小的算法，你应该关掉你的IDE，丢开你的电脑，在白纸上写好关键步骤，思考该方案是否有遗漏，是否考虑还欠缺，以后变动该如何扩展等等，若能请同事帮忙看看更好了，然后再去实现它。记住总是要先思考，然后行动，渐渐地你会发现，你的工作比以前做的更好了。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;尽快开始&lt;/strong&gt;&lt;br/&gt;
+这和“&lt;em&gt;先思考再行动&lt;/em&gt;”并不不冲突，尽快开始是希望你不要做事拖沓，明天还有时间之类的话，或许会让你走向尴尬的处境。一些简单的事情更应该快速完成，比如说回复邮件。克服拖沓的习惯，早一天把自己培养成一个雷厉风行的人。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;善用工具&lt;/strong&gt;&lt;br/&gt;
+“&lt;em&gt;工欲善其事，必先利其器。&lt;/em&gt;”选择好的工具，也是你提高工作效率到一大途径。就拿编辑器来说，我会用&lt;a href=&quot;http://www.eclipse.org&quot;&gt;Eclipse&lt;/a&gt;写Java代码，&lt;a href=&quot;http://www.sublimetext.com&quot;&gt;Sublime Text 2&lt;/a&gt;进行文本编辑。这些编辑器都有自己的特色，解决问题的领域，我会选择它们擅长的领域来使用。在其他平台下，我也会优先考虑对应的编辑器。原则就是什么样的工具可以给你带来优势，就用什么工具，不要怕花时间去对比几款工具，也不要怕花时间去熟悉一款好的工具。记住，它们会给你带来效率。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;使用快捷键&lt;/strong&gt;&lt;br/&gt;
+我曾经在网上看到一位VIMer说：“&lt;em&gt;用VIM写程序，就像打电玩一样。&lt;/em&gt;”，你能想象这是什么情况吗？其实就是对VIM的快捷键非常熟悉了。每款软件都有许多快捷键，优秀的软件还可以让你自定义快捷键，所以，记住常用功能的快捷键就会明显提高你的工作效率，你也不妨花点时间为自己的工具设置合理的快捷键，一劳永逸。这些快捷键会让你工作起来行云流水一般。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;优先完成困难的任务&lt;/strong&gt;&lt;br/&gt;
+或许你已经听过这样的策略了：“&lt;em&gt;我们应该选择价值高，风险低的先做；价值一般，风险一般的后做，价值低，风险高的拒绝做。&lt;/em&gt;&quot;，这非常好，但是若必须要完成的任务，你会如何做？我趋向于优先选择认为是最困难的那一部分开始，保持好的精神状态，集中精力完成最困难的那一部分，然后其他到就会很容易完成，事实上，困难的部分，估计也只会花掉你两三个小时，但会给你更多信心来完成剩余的部分。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;善于总结&lt;/strong&gt;&lt;br/&gt;
+当你开发新系统的时候，你是否意识到，我在上个项目里有过类似到功能，但是很遗憾，我必须重新再来写一遍。若是遇到这个情况，就是你总结没有做好的原因了。我的建议是每个项目，或者功能模块完成后，都进行必要的总结，或者定时，如每周，做一个总结。你甚至应该给自己建立一个版本管理库，将你的总结放进去，无论是设计，代码，还是配置等，都可以放进去，当你再次遇到相似问题的时候，信手拈来即可，无疑给你带来诸多便利。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;善于沟通&lt;/strong&gt;&lt;br/&gt;
+人的精力是有限的，你不可能成为一个百事通。你需要多和其他人沟通，为什么说一个沟通多的团队会成长很快，这个是有道理的。我举一个自己的例子：曾经我在写代码的时候，一位女同事过来闲聊，就顺口问我在做什么，我说我在实现某个功能，她听了后说，你只要把xx属性设置为xx就OK了，我一试，果然成功了。这位同事的工作能力如何并不重要，毫无疑问，她对这个框架比我熟悉多了，她至少为我节约了好几个小时的时间！你需要积极的学习工作中需要的知识，更要和擅长这些知识的人沟通，向他们学习，三人行，必有我师。所以在你工作空闲时，不妨了解下同事的工作，不妨阅读同事的代码，不妨和同事交流下思路，这会让你受益匪浅。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;主观能动性&lt;/strong&gt;&lt;br/&gt;
+主观能动性过于抽象，我们可以通俗一点，叫做积极性。你应该渴望得到上司的赞扬，渴望在团队中被认可；你应该追求解决难题之后的快乐,追求结束任务的那种成就感；你也应该在困难中继续探索研究，在逆境中继续前进不止。一个做事积极的人和一个做事不积极的人，完成事情的效率，相差何止几倍。争取做一个做事积极的人吧，这种人格魅力会带给你更多意想不到的收获，比如人缘，比如晋升机会。&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;在写完这篇博客的草稿之后，优先给女朋友审查了一番，得到的回答是：“&lt;em&gt;一个没有工作的人，居然写如何提高工作效率，唉，不过写得还不错！&lt;/em&gt;”，我很惭愧最近公司出了问题，也没有尽快找到一份好工作，不管如何，我希望我写的这些可以给读到这篇文章的人一些思考，有所领悟。&lt;/p&gt;
+</content>
+    </entry>
+    
+    <entry>
+        <title>教你一步一步搭建Jekyll博客【Mac】</title>
+        <link href="http://fanshine.github.io/laravelLearningBlog//2012-08-15/setup-jekyll-step-by-step.html"/>
+        <updated>2012-08-15T00:00:00+08:00</updated>
+        <id>http://fanshine.github.io/laravelLearningBlog//2012-08-15/setup-jekyll-step-by-step.html</id>
+        <content type="html">&lt;p&gt;现在我使用的博客是用&lt;a href=&quot;https://github.com/mojombo/jekyll&quot;&gt;Jekyll&lt;/a&gt;搭建的，放在&lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt;上，我也用它来记录我的工作、学习的心得，以及生活的点滴，目前它用起来还不错，我很喜欢。
+现在回想起来，当初搭建它的过程蛮&lt;strong&gt;“曲折”&lt;/strong&gt;的，网上有不少的资料，但是没有完整的、一步一步式的文章，我一直看官方的文档，也研究了不少其他博客的代码，也花了很多时间来修改它，总算有些心得，现在把它记下来，让需要的人可以节省宝贵的时间。
+当然了，你也可以选择&lt;a href=&quot;http://jekyllbootstrap.com&quot;&gt;JekyllBootstrap&lt;/a&gt;来搭建博客，它应该可以很快让你开始写博客了，帮你绕过诸多的麻烦，不过我总是喜欢自己来动手完成这个事情，所以这篇文章也是写给和我有相同想法的人。&lt;/p&gt;
+
+&lt;p&gt;我使用的是Mac搭建的，Mac自带了Ruby-1.8.7，Python-2.7.2，所以省了这些软件的安装，若是其他平台的话，需要先安装相关的环境。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;升级gem&lt;/strong&gt;
+
+&lt;blockquote&gt;&lt;p&gt;sudo gem update --system&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;修改gem源&lt;/strong&gt;
+ 某些gem源很难安装成功，大多数是网络问题，我尝试了下面两个源，最终顺利通过了，建议选择适当的源安装。
+
+&lt;blockquote&gt;&lt;p&gt;gem sources  #查看源列表
+gem sources --remove http://xxx.org #移除不需要的他源
+gem sources --add http://gems.rubyforge.org #添加rubyforge源
+gem sources --add http://gems.github.com #添加github源&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;安装Jekyll&lt;/strong&gt;
+ 安装Jekyll可能会遇到若干错误，这一步我也遇到了诸多麻烦，多数是网络不给力，老是超时，后来我在深夜网络速度好的时候尝试，终于安装成功了。若这一步遇到其他错误，建议把错误信息直接放到Google里搜索，若是把你带你到了&lt;a href=&quot;http://stackoverflow.com&quot;&gt;stackoverflow&lt;/a&gt;上，一般都能教容易解决问题。
+
+&lt;blockquote&gt;&lt;p&gt;sudo gem install jekyll&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;创建默认的目录结构&lt;/strong&gt;
+ 安装好jekyll之后，我们可以来写博客了，首选需要创建基本的目录结构，省去繁琐的命令，创建之后的目录结构如下：
+
+&lt;blockquote&gt;&lt;p&gt;.
+|-- _includes
+|-- _layouts
+|-- |-- default.html
+|-- |-- post.html
+|-- _posts
+|-- |-- 2012-08-15-hello-world.md
+|-- _site
+|-- _config.yml
+|-- index.html&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;测试&lt;/strong&gt;
+ 尝试启动本地服务器，看环境安装，以及目录的创建是否都OK。
+
+&lt;blockquote&gt;&lt;p&gt;jekyll --server
+ 若本地服务器启动正常，打开浏览器，输入地址：&lt;a href=&quot;http://localhost:4000&quot;&gt;http://localhost:4000&lt;/a&gt;，若没有问题的话，可以看到index.html的内容。
+ 另外，启动服务的服务的时候，建议修改Jekyll配置文件_configy.yml，增加如下代码：
+auto: true
+ 该代码让Jekyll自动检测修改，否则每次修改后，你都需要重新启动服务器才能看到变化，比较麻烦。更多Jekyll的配置，请看&lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/configuration&quot;&gt;官方配置说明&lt;/a&gt;。&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;定义默认的布局文件&lt;/strong&gt;
+ 一起看起来都还OK？那么我们来开始完善我们的博客吧，首先我们需要一个模板，这个模板供所有页面使用，它会引入需要的css，javascript等文件，以及导航条，版权等信息。我想你应该熟悉这个模板的样子，所以我只想说明其中你可能需要注意的两点，具体细节可以参考下我的&lt;a href=&quot;https://github.com/fanshine/fanshine.github.com/blob/master/_layouts/default.html&quot;&gt;default.html&lt;/a&gt;。
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;标题&lt;/strong&gt; 你可能需要自定义你的标题，我是这样定义我的博客标题的：
+
+&lt;blockquote&gt;&lt;p&gt;{&lt;em&gt;%&lt;/em&gt; if page.title %} {{ page.title }} - {&lt;em&gt;%&lt;/em&gt; endif %} Laravel知识整理
+  如果页面定义了标题的话，它会使用该标题，并跟上“ - Laravel知识整理”，作为浏览器的标题，否则就直接将“Laravel知识整理”作为浏览器的标题。&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内容占位符&lt;/strong&gt; 使用{{content}}来定义内容占位符，使用该模板时，内容将替换该模板里的占位符。
+编写模板的时候，需要用到&lt;a href=&quot;https://github.com/Shopify/liquid&quot;&gt;Liquid&lt;/a&gt;模板引擎，它学习起来并不难，下面两篇文章浏览一遍，应该就可以快速上手了：&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/shopify/liquid/wiki/liquid-for-designers&quot;&gt;Liquid for Designers&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/Liquid-Extensions&quot;&gt;Liquid Extensions&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;定义显示文章的布局文件&lt;/strong&gt;
+ 我们还需要为每篇文章制定一个模板，制定方式和制定默认模板default.html是一样的，甚至我们可以套用默认的模板来简化工作，只需要在post.html前面增加如下代码：
+
+&lt;blockquote&gt;&lt;p&gt;---
+layout: default
+---
+ 这样，post的布局就使用了默认的模板，只需要针对博文制定下模板就可以了，比如说标题，内容，日期如何显示等，具体细节可以参考下我的&lt;a href=&quot;https://github.com/fanshine/fanshine.github.com/blob/master/_layouts/post.html&quot;&gt;post.html&lt;/a&gt;。需要注意的是：post里也有可以使用{{conten}}，但是这里该变量已经不是占位符了，可以说它是一个变量，即post.content，代表了博文的正文内容。
+ 完成这一步后，可以打开&lt;a href=&quot;http://localhost:4000/2012-08-15/hello-world.html&quot;&gt;hello-world&lt;/a&gt;页面看看你的模板是否都起作用了。&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;定义首页&lt;/strong&gt;
+ 我们的首页依然是空洞的index.html的内容，这个可不是我们希望的，那么，我们一起来修改修改。
+ 首页应该显示什么呢？可以显示博客列表，带分页功能，或者只显示最近的N篇博客。
+ 我们就来实现第二种吧，简单实用，和我目前的做法相同。至于如何实现分页，感兴趣的朋友可以去阅读相关知识，自己尝试实现 :-)
+ 我们只需要修改index.html页面，增加如下代码：
+
+&lt;blockquote&gt;&lt;p&gt;{&lt;em&gt;%&lt;/em&gt; for post in site.posts limit:5 %}
+\&amp;lt;h2&gt;\&lt;a class=&quot;post_title&quot; href=&quot;\{\{post.url\}\}&quot;&gt;{{post.title}}\&amp;lt;/a&gt;\&amp;lt;/h2&gt;
+\&lt;div class=&quot;post-content&quot;\&gt;{{post.content}}\&amp;lt;/div&gt;
+{&lt;em&gt;%&lt;/em&gt; endfor %}
+ 该代码会显示最近的5篇博文。
+ 另外，记得引入默认的布局模板，并设置好页面的标题，这样，整个博客的风格看起来就一致了，我们也指定了页面的标题为“首页”，那么首页显示的时候，就会将“首页 - Laravel知识整理”作为浏览器的标题了。
+---
+layout: default
+title: 首页
+---
+ 具体细节可以参考下我的&lt;a href=&quot;https://github.com/fanshine/fanshine.github.com/blob/master/index.html&quot;&gt;index.html&lt;/a&gt;。&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;按日期归档博客&lt;/strong&gt;
+每个博客都应该有一个归档的功能。我们也来做一个吧。新建archives.html，增加如下代码：
+
+&lt;blockquote&gt;&lt;p&gt;{&lt;em&gt;%&lt;/em&gt; capture archives_year %}
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{{ &#39;now&#39; | date: &#39;%Y&#39; }}
+{&lt;em&gt;%&lt;/em&gt; endcapture %}&lt;/p&gt;
+
+&lt;p&gt;{&lt;em&gt;%&lt;/em&gt; for post in site.posts %}
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{&lt;em&gt;%&lt;/em&gt; capture post_year %}
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{{ post.date | date: &#39;%Y&#39; }}
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{&lt;em&gt;%&lt;/em&gt; endcapture %}
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{&lt;em&gt;%&lt;/em&gt; if archives_year != post_year %}
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{&lt;em&gt;%&lt;/em&gt; assign archives_year = post_year %}
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;\&amp;lt;h2&gt;{{ archives_year }}\&amp;lt;/h2&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{&lt;em&gt;%&lt;/em&gt; endif %}
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;{{ post.date | date: &quot;%m-%d&quot; }} - \&lt;a href=&quot;\{\{post.url\}\}&quot;&gt;{{ post.title }}\&amp;lt;/a&gt; \&amp;lt;/br&gt;
+{&lt;em&gt;%&lt;/em&gt; endfor %}&lt;/p&gt;&lt;/blockquote&gt;
+
+该代码会将所有的博客按照日期（年份）进行归档。上面的代码看起来会是这个样子：
+&lt;img src=&quot;/uploads/2012-08-15/archives.png&quot; alt=&quot;归档&quot; /&gt;
+同时，我们也为归档页面制定布局模板和标题：
+
+&lt;blockquote&gt;&lt;p&gt;---
+layout: default
+title: 归档
+---
+具体细节可以参考下我的&lt;a href=&quot;https://github.com/fanshine/fanshine.github.com/blob/master/archives.html&quot;&gt;archives.html&lt;/a&gt;。&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;代码高亮&lt;/strong&gt;
+见我另外一篇博客：&lt;a href=&quot;/2012-09-21/jekyll-code-highlight.html&quot;&gt;Jekyll代码高亮&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;集成第三方评论&lt;/strong&gt;
+（待完成）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;后续工作&lt;/strong&gt;
+现在差不多可以让你开始写博客了，强烈建议你把它发布到&lt;a href=&quot;http://pages.github.com&quot;&gt;GitHub Pages&lt;/a&gt;上去。这里有一个使用Jekyll搭建的博客&lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/Sites&quot;&gt;列表&lt;/a&gt;，你会发现，很多都是放在&lt;a href=&quot;http://pages.github.com&quot;&gt;GitHub Pages&lt;/a&gt;上的。
+另外，目前的博客还不算一个完善的博客，你应该继续添加如下的文件：
+
+&lt;ul&gt;
+&lt;li&gt;404.html&lt;/li&gt;
+&lt;li&gt;about.html&lt;/li&gt;
+&lt;li&gt;rss.xml（atom.xml）&lt;/li&gt;
+&lt;li&gt;favicon.ico&lt;/li&gt;
+&lt;li&gt;robots.txt&lt;/li&gt;
+&lt;li&gt;sitemap.xml&lt;/li&gt;
+&lt;li&gt;search.xml&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;它们需要你继续花时间去完成，我就不详细写出来了，对于一个简单的博客，上面介绍的已经足够了。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;hr /&gt;
+
+&lt;p&gt;整个过程我写得比较简单实用，也记录了主要的步骤和思路，若你已经可以搭建一个基于Jkeyll的博客，这篇博客的目的基本达到了。但若有不正确的地方，欢迎指正。&lt;/p&gt;
+
+&lt;p&gt;参考阅读：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;http://tom.preston-werner.com/2008/11/17/blogging-like-a-hacker.html&quot;&gt;Blogging Like a Hacker&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/_pages&quot;&gt;Jekyll Wiki&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/Shopify/liquid/wiki&quot;&gt;Liquid Wiki&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://help.github.com/categories/20/articles&quot;&gt;GitHub Help&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+</content>
+    </entry>
+    
+    <entry>
+        <title>设计模式之代理模式</title>
+        <link href="http://fanshine.github.io/laravelLearningBlog//2012-07-23/proxy.html"/>
+        <updated>2012-07-23T00:00:00+08:00</updated>
+        <id>http://fanshine.github.io/laravelLearningBlog//2012-07-23/proxy.html</id>
+        <content type="html">&lt;p&gt;代理模式属于结构性模式。&lt;br/&gt;
+在GOF中定义为：对其他对象提供一种代理以控制对这个对象的访问。&lt;/p&gt;
+
+&lt;p&gt;在某些情况下，一个对象不想或者不能直接引用另一个对象，比如说安全性的考虑，就会使用模式，代理对象在客户端和目标对象之间起到中介的作用。&lt;/p&gt;
+
+&lt;p&gt;那么如何实现代理模式呢？&lt;br/&gt;
+所谓的代理对象和被代理的对象会实现相同的接口，代理对象会持有被代理对象的一个实例，借助这个实例哎完成真正的功能，而代理对象会做一些其他的的操作，比如说权限控制等。&lt;/p&gt;
+
+&lt;p&gt;先来看看代理模式的通用代码：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Subject&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Proxy&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Subject&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Subject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Subject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;subject&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Auth.&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RealSubject&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Subject&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Real Subject.&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;客户端调用：&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Proxy&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;proxy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RealSubject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;代码很简单，理解应该不是什么问题。 &lt;br/&gt;
+接下来对涉及到的三种角色做一个说明：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Subject：抽象主题角色。&lt;/li&gt;
+&lt;li&gt;Proxy：代理角色。和RealSubject一样，实现了Subject接口，并且，它持有一个RealSubject的实例，真正完成操作实际上是使用RealSubject变量完成的。&lt;/li&gt;
+&lt;li&gt;RealSubject：真实主题角色。实现Subject接口，完成真正的操作，同时为代理角色服务。&lt;/li&gt;
+&lt;/ol&gt;
+
+</content>
+    </entry>
+    
+
+</feed>
+

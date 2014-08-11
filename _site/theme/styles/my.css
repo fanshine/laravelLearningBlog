@@ -1,0 +1,9 @@
+pre {
+	border: 1px solid #888;
+	padding: 10px;
+	margin: 10px 0;
+}
+
+a.post_title:hover { 
+	color: #2EACC5 !important;
+}

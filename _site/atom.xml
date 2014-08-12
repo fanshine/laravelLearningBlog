@@ -4,7 +4,7 @@
     <title></title>
     <link href="http://fanshine.github.io/laravelLearningBlog//atom.xml" rel="self" type="application/atom+xml"/>
     <link href="http://fanshine.github.io/laravelLearningBlog/" rel="alternate" type="text/html" />
-    <updated>2014-08-11T19:16:29+08:00</updated>
+    <updated>2014-08-11T22:45:51+08:00</updated>
     <id>http://fanshine.github.io/laravelLearningBlog/</id>
 
     <author>
@@ -12,6 +12,19 @@
         <email>fanshine124@gmail.com</email>
     </author>
 
+    
+    <entry>
+        <title>开始使用Laravel4</title>
+        <link href="http://fanshine.github.io/laravelLearningBlog//2014-08-11/getting-started-with-laravel-4.html"/>
+        <updated>2014-08-11T00:00:00+08:00</updated>
+        <id>http://fanshine.github.io/laravelLearningBlog//2014-08-11/getting-started-with-laravel-4.html</id>
+        <content type="html">&lt;p&gt;&lt;a href=&quot;https://github.com/laravel/framework&quot;&gt;Laravel 4&lt;/a&gt; 是流行的PHP框架&lt;a href=&quot;http://laravel.com/&quot;&gt;Laravel&lt;/a&gt;的一个最新升级版本。Laravel是一个“干净优雅”的用于Web开发的现代PHP框架。受&lt;a href=&quot;http://rubyonrails.org/&quot;&gt;Ruby on Rails&lt;/a&gt;，以及&lt;a href=&quot;http://symfony.com/&quot;&gt;Symfony&lt;/a&gt;框架的启发，Laravel 4致力于让你使用近年来日益完善的PHP新技术来开发好的web程序。&lt;/p&gt;
+
+&lt;p&gt;Laravel 4脱胎于&lt;a href=&quot;http://laravel.com&quot;&gt;Laravel 3&lt;/a&gt;，但是对上一个版本又做了很多的改进。现在，Laravel 4是一个经过了大量测试，并且在维持干净优雅的语法结构的基础上，继续添加新的组件和特性的框架。&lt;/p&gt;
+
+&lt;p&gt;Laravel 4通过&lt;a href=&quot;http://getcomposer.org/&quot;&gt;Composer&lt;/a&gt;来管理更新和独立的第三方组件&lt;/p&gt;
+</content>
+    </entry>
     
     <entry>
         <title>no branches ready for upload</title>
@@ -764,70 +777,6 @@ title: 归档
 &lt;li&gt;&lt;a href=&quot;https://github.com/mojombo/jekyll/wiki/_pages&quot;&gt;Jekyll Wiki&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/Shopify/liquid/wiki&quot;&gt;Liquid Wiki&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://help.github.com/categories/20/articles&quot;&gt;GitHub Help&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-</content>
-    </entry>
-    
-    <entry>
-        <title>设计模式之代理模式</title>
-        <link href="http://fanshine.github.io/laravelLearningBlog//2012-07-23/proxy.html"/>
-        <updated>2012-07-23T00:00:00+08:00</updated>
-        <id>http://fanshine.github.io/laravelLearningBlog//2012-07-23/proxy.html</id>
-        <content type="html">&lt;p&gt;代理模式属于结构性模式。&lt;br/&gt;
-在GOF中定义为：对其他对象提供一种代理以控制对这个对象的访问。&lt;/p&gt;
-
-&lt;p&gt;在某些情况下，一个对象不想或者不能直接引用另一个对象，比如说安全性的考虑，就会使用模式，代理对象在客户端和目标对象之间起到中介的作用。&lt;/p&gt;
-
-&lt;p&gt;那么如何实现代理模式呢？&lt;br/&gt;
-所谓的代理对象和被代理的对象会实现相同的接口，代理对象会持有被代理对象的一个实例，借助这个实例哎完成真正的功能，而代理对象会做一些其他的的操作，比如说权限控制等。&lt;/p&gt;
-
-&lt;p&gt;先来看看代理模式的通用代码：&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Subject&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Proxy&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Subject&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Subject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Subject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;subject&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;subject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Auth.&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RealSubject&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Subject&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Real Subject.&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;客户端调用：&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Proxy&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;proxy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RealSubject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;代码很简单，理解应该不是什么问题。 &lt;br/&gt;
-接下来对涉及到的三种角色做一个说明：&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Subject：抽象主题角色。&lt;/li&gt;
-&lt;li&gt;Proxy：代理角色。和RealSubject一样，实现了Subject接口，并且，它持有一个RealSubject的实例，真正完成操作实际上是使用RealSubject变量完成的。&lt;/li&gt;
-&lt;li&gt;RealSubject：真实主题角色。实现Subject接口，完成真正的操作，同时为代理角色服务。&lt;/li&gt;
 &lt;/ol&gt;
 
 </content>

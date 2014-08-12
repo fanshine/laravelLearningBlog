@@ -30,7 +30,7 @@ blockquote:before,blockquote:after,q:before,q:after {
     content: "";
 }
 body {
-    background: #555 url(/theme/images/gk-bg-dark.png);
+    background: #555 url(/laravelLearningBlog/theme/images/gk-bg-dark.png);
     _background: #555;
     color: #666;
     font: normal 15px/22px 'PT Sans','Trebuchet MS',Arial,sans-serif;
@@ -80,14 +80,14 @@ object,embed {
     vertical-align: bottom;
 }
 #wrapper {
-    background: #fff url(/theme/images/gk-bg-medium.png);
+    background: #fff url(/laravelLearningBlog/theme/images/gk-bg-medium.png);
     _background: #fff;
     margin: 0 auto;
     width: 860px;
     overflow: hidden;
 }
 #header,#footer {
-    background: #222 url(/theme/images/gk-bg-light.png);
+    background: #222 url(/laravelLearningBlog/theme/images/gk-bg-light.png);
     _background: #222;
     color: #666;
     padding: 60px 80px;
@@ -339,7 +339,7 @@ h2.results span {
     margin: 0 80px 60px;
 }
 #post-navigation {
-    background: #333 url(/theme/images/gk-bg-medium.png);
+    background: #333 url(/laravelLearningBlog/theme/images/gk-bg-medium.png);
     _background: #333;
     padding: 0 80px;
     text-transform: uppercase;
@@ -368,7 +368,7 @@ h2.results span {
     color: #fff;
 }
 #top {
-    background: #222 url(/theme/images/gk-icon-top.png);
+    background: #222 url(/laravelLearningBlog/theme/images/gk-icon-top.png);
     bottom: 5px;
     height: 35px;
     position: fixed;
@@ -378,8 +378,8 @@ h2.results span {
     _display: none;
 }
 .zoom {
-    background: url(/theme/images/gk-icon-zoom.png) no-repeat scroll 0 0;
-    _background-image: url(/theme/images/gk-icon-zoom-ie6.png);
+    background: url(/laravelLearningBlog/theme/images/gk-icon-zoom.png) no-repeat scroll 0 0;
+    _background-image: url(/laravelLearningBlog/theme/images/gk-icon-zoom-ie6.png);
     bottom: 10px;
     display: block;
     height: 30px;
@@ -405,21 +405,21 @@ h2.results span {
 
 .tag-search{position:absolute; right:80px; top:65px; zoom:1;}
 .tag-search input{margin:0; padding:0; border:0 none; outline:none;}
-.search-text-wrapper{ 
-    position:relative; 
-    width:206px; 
-    height:36px; 
-    background:url(/theme/images/search-box.png) no-repeat 0 0; 
-    zoom:1; 
+.search-text-wrapper{
+    position:relative;
+    width:206px;
+    height:36px;
+    background:url(/laravelLearningBlog/theme/images/search-box.png) no-repeat 0 0;
+    zoom:1;
     overflow:hidden;}
-.search-text-wrapper label{ 
-    cursor:text; 
-    color:#555; 
-    font-size:14px; 
-    line-height:16px; 
-    position:absolute; 
-    left:12px; 
-    top:10px; 
+.search-text-wrapper label{
+    cursor:text;
+    color:#555;
+    font-size:14px;
+    line-height:16px;
+    position:absolute;
+    left:12px;
+    top:10px;
     _top:11px;
 }
 .tag-search .search-text{color:#555; width:155px; float:left; margin-left:12px; height:22px; line-height:22px;  margin-top:6px; font-size:14px;background:transparent;}

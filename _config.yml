@@ -1,7 +1,7 @@
 safe:        false
 port: 4000
 baseurl:     /
-url:         http://fanshine.github.io/laravelLearningBlog/
+# url:         http://fanshine.github.io/laravelLearningBlog/
 
 
 github: [Repository metadata]

@@ -2,7 +2,7 @@
 title: 开始使用Laravel4
 layout: post
 categories: ['Laravel4']
-tags: ['MySQL', 'Event']
+tags: ['Laravel 4', 'Install']
 description: '开始使用Laravel4'
 ---
 
@@ -26,4 +26,4 @@ Laravel 4基本无需额外的配置，但是在本机使用还是对环境有�
 
 首先，你需要安装[Composer](http://getcomposer.org/)。Composer是一个PHP的包管理工具，允许你很方便的在自己的工程中管理不同的PHP组件。如果你没能把Composer配置起来，可以看一下[这篇文章](http://culttt.com/2013/01/07/what-is-php-composer/)
 
-其次，你也需要确保PHP的最低版本是{% highlight php %} 5.3.7 {% endhighlight %}，并且安装好{% highlight php %}MCrypt PHP{% endhighlight %}扩展
+其次，你也需要确保PHP的最低版本是  ``` 5.3.7 ```，并且安装好``` MCrypt PHP ```扩展

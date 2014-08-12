@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
     <title></title>
-    <link href="http://fanshine.github.io/laravelLearningBlog//atom.xml" rel="self" type="application/atom+xml"/>
-    <link href="http://fanshine.github.io/laravelLearningBlog/" rel="alternate" type="text/html" />
-    <updated>2014-08-12T19:59:24+08:00</updated>
-    <id>http://fanshine.github.io/laravelLearningBlog/</id>
+    <link href="/atom.xml" rel="self" type="application/atom+xml"/>
+    <link href="" rel="alternate" type="text/html" />
+    <updated>2014-08-12T21:51:08+08:00</updated>
+    <id></id>
 
     <author>
         <name>Laravel 知识整理</name>
@@ -15,9 +15,9 @@
     
     <entry>
         <title>开始使用Laravel4</title>
-        <link href="http://fanshine.github.io/laravelLearningBlog//2014-08-11/getting-started-with-laravel-4.html"/>
+        <link href="/2014-08-11/getting-started-with-laravel-4.html"/>
         <updated>2014-08-11T00:00:00+08:00</updated>
-        <id>http://fanshine.github.io/laravelLearningBlog//2014-08-11/getting-started-with-laravel-4.html</id>
+        <id>/2014-08-11/getting-started-with-laravel-4.html</id>
         <content type="html">&lt;p&gt;&lt;a href=&quot;https://github.com/laravel/framework&quot;&gt;Laravel 4&lt;/a&gt; 是流行的PHP框架&lt;a href=&quot;http://laravel.com/&quot;&gt;Laravel&lt;/a&gt;的一个最新升级版本。Laravel是一个“干净优雅”的用于Web开发的现代PHP框架。受&lt;a href=&quot;http://rubyonrails.org/&quot;&gt;Ruby on Rails&lt;/a&gt;，以及&lt;a href=&quot;http://symfony.com/&quot;&gt;Symfony&lt;/a&gt;框架的启发，Laravel 4致力于让你使用近年来日益完善的PHP新技术来开发好的web程序。&lt;/p&gt;
 
 &lt;p&gt;Laravel 4脱胎于&lt;a href=&quot;http://laravel.com&quot;&gt;Laravel 3&lt;/a&gt;，但是对上一个版本又做了很多的改进。现在，Laravel 4是一个经过了大量测试，并且在维持干净优雅的语法结构的基础上，继续添加新的组件和特性的框架。&lt;/p&gt;
